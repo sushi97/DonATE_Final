@@ -80,7 +80,7 @@ public class MoneyDonate extends AppCompatActivity {
                 List<NGOList> receiverlist = response.body();
                 Log.e("TAG", "onResponse in money: ");
                 nongovlist = new ArrayList<>();
-                for(int i = 0; i < receiverlist.size(); i++) {
+                for (int i = 0; i < receiverlist.size(); i++) {
                     nongovlist.add(receiverlist.get(i).getName());
                 }
                 setSpinner();
@@ -149,7 +149,6 @@ public class MoneyDonate extends AppCompatActivity {
 
 
     /**
-     *
      * Fetch Access token and unique transactionID from developers server
      */
     private void fetchTokenAndTransactionID() {
@@ -231,7 +230,7 @@ public class MoneyDonate extends AppCompatActivity {
 
     private void createOrder(String accessToken, String transactionID) {
         String name = nameBox.getText().toString();
-        final String email = emailBox   .getText().toString();
+        final String email = emailBox.getText().toString();
         String phone = phoneBox.getText().toString();
         String amount = amountBox.getText().toString();
         String description = descriptionBox.getText().toString();
@@ -368,12 +367,13 @@ public class MoneyDonate extends AppCompatActivity {
         HttpUrl.Builder builder = getHttpURLBuilder();
         builder.addPathSegment("status");
 
-        if (transactionID != null){
+        if (transactionID != null && currentEnv != null) {
             builder.addQueryParameter("transaction_id", transactionID);
+            builder.addQueryParameter("env", currentEnv.toLowerCase());
         } else {
             builder.addQueryParameter("id", orderID);
         }
-        builder.addQueryParameter("env", currentEnv.toLowerCase());
+
         HttpUrl url = builder.build();
 
         okhttp3.Request request = new okhttp3.Request.Builder()
@@ -440,7 +440,6 @@ public class MoneyDonate extends AppCompatActivity {
                         showToast("Transaction successful for id - " + finalPaymentID);
 
 
-
                         refundTheAmount(transactionID, finalAmount);
                     }
                 });
@@ -453,7 +452,7 @@ public class MoneyDonate extends AppCompatActivity {
      * Will initiate a refund for a given transaction with given amount
      *
      * @param transactionID Unique identifier for the transaction
-     * @param amount    amount to be refunded
+     * @param amount        amount to be refunded
      */
     private void refundTheAmount(String transactionID, String amount) {
         if (accessToken == null || transactionID == null || amount == null) {
@@ -521,7 +520,6 @@ public class MoneyDonate extends AppCompatActivity {
             }
         });
     }
-
 
 
     @Override
